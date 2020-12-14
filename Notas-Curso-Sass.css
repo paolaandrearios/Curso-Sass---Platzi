@@ -1,0 +1,626 @@
+/*
+https://www.sassmeister.com/  (para verificar código sass)
+
+ Documentación sobre sass
+https://sass-lang.com/documentation 
+
+
+Diferencias entre Sass, Stylus y Less
+Aunque hay muchos preprocesadores, en este curso nos vamos a concentrar en Sass, Stylus y Less.
+
+Less, por ejemplo, es un preprocesador muy simple.
+Sass, por otro lado, es una herramienta muy interesante gracias a su comunidad.
+Finalmente, Stylus tiene la ventaja de que es muy completo e incluso complejo.
+
+Son muy parecidos ya que todos tienen el mismo objetivo de simplificar el Css,pero cada uno de ellos su manera.
+
+**Sass : **una ventaja es que tiene un soporte muy grande por parte de la comunidad
+
+Less: es un preprocesador muy simple, bastante practico, trabajar con él con proyectos pequeños muy compacto y rápido.
+
+Stylus: tiene la ventaja que es muy completo, bastante avanzado y permite acercarse un poco más lo que es programar .
+
+----------------------------------------------
+
+Configuración de VSCode para Sass
+
+Las extensiones que se tienen son:
+.
+
+Live Server: Esta crea un servidor que se actualiza cuando guardamos, lo que nos permite ver los cambios sin necesidad de recargar manualmente. Es necesaria para la siguiente extensión.
+Live Sass Compiler: Esta transforma nuestros archivos .sccs o .sass a .css y crea un servidor basado en Live Server
+Sass: Sirve para obtener sugerencias, autocompletado y formateo al escribir el código.
+.
+Para asegurarte que los archivos se creen con la misma organización de carpetas que el profesor debes configurarlo con un archivo json de la siguiente forma:
+Crea una carpeta en la raiz de tu proyecto con el nombre .vscode
+Adentro crea un archivo con el nombre settings.json
+En el archivo json copia lo siguiente:
+{
+    "liveSassCompile.settings.formats":[
+        // This is Default.
+        {
+            "format": "expanded",
+            "extensionName": ".css",
+            "savePath": "/css/"
+        } 
+    ]
+}
+Esto va a hacer que el archivo css compilado se guarde en la carpeta /project_folder/css/.
+.
+Si te ayudó déjame un corazoncito, pls. ^_^
+.
+Fuente: FAQ (for beginners), VSCode Live Sass Compiler Settings.
+
+---------------------------------------------------
+
+Estructura de CSS
+
+La primera ventaja que se nos ocurre es que podemos organizar nuestro Sass. Lo clave es que podemos separar nuestro código en archivos. Ya no tenemos que revisar un archivo muy amplio, sino que podemos hacer modificaciones a un solo archivo, lo que nos hace el trabajo mucho más fácil.
+Para organizar e importar archivos usamos @import.
+
+La forma de nombrar los archivos que van a ser importados es con un _ al inicio (para no compilarlos).
+
+@import "_nombre_archivo.scss"
+
+Posible Estructura de Carpetas:
+Base
+Component
+Mixins
+Layout
+Vendor
+
+[https://www.lullabot.com/articles/bem-atomic-design-a-css-architecture-worth-loving](BEM + Atomic Design - Worth Loving)
+
+
+00_base/
+├  _root.scss
+├  _normalize.scss
+└  _typography.scss
+
+01_atom/
+└  _a-buttons.scss
+
+02_molecule/
+├  _m-teaser.scss
+├  _m-menu.scss
+└  _m-card.scss
+
+03_organism/
+├  _o-teaser-list.scss
+└  _o-card-list.scss
+
+04_template/
+├  _t-section.scss
+└  _t-article.scss
+
+05_page/
+├  _p-blog.scss
+└  _p-home.scss
+
+style.scss
+
+---------------------------------------------------------------------
+
+http://thesassway.com/beginner/how-to-structure-a-sass-project
+
+Basic directory structure
+I like to layout my Sass projects like this:
+
+stylesheets/
+|
+|-- modules/              # Common modules
+|   |-- _all.scss         # Include to get all modules
+|   |-- _utility.scss     # Module name
+|   |-- _colors.scss      # Etc...
+|   ...
+|
+|-- partials/             # Partials
+|   |-- _base.sass        # imports for all mixins + global project variables
+|   |-- _buttons.scss     # buttons
+|   |-- _figures.scss     # figures
+|   |-- _grids.scss       # grids
+|   |-- _typography.scss  # typography
+|   |-- _reset.scss       # reset
+|   ...
+|
+|-- vendor/               # CSS or Sass from other projects
+|   |-- _colorpicker.scss
+|   |-- _jquery.ui.core.scss
+|   ...
+|
+`-- main.scss            # primary Sass file
+Primary stylesheet
+This allows me to keep my primary Sass file extremely clean:
+
+// Modules and Variables
+@import "partials/base";
+
+// Partials
+@import "partials/reset";
+@import "partials/typography";
+@import "partials/buttons";
+@import "partials/figures";
+@import "partials/grids";
+// ...
+
+// Third-party
+@import "vendor/colorpicker";
+@import "vendor/jquery.ui.core";
+
+
+---------------------------------------------------------------------------------------
+
+Variables
+
+Las variables son elementos que podemos definir y asignarle un valor específico. En el caso de nuestro proyecto PlatziMusic tendrá algunas modificaciones. Para eso podemos usar las variables en los preprocesadores.
+
+Variables
+Las variables son una forma de almacenar la información que se desea reutilizar a lo largo de la hoja de estilo.
+
+Se puede almacenar cosas como colores, pilas de fuentes o cualquier valor de CSS que que se desea reutilizar. Sass usa el símbolo $ para hacer que algo sea una variable.
+
+Aquí hay un ejemplo:
+
+$font-stack: Helvetica, sans-serif
+$primary-color: #333
+
+body {
+  font: 100% $font-stack
+  color: $primary-color
+}
+BEM — Block Element Modifier o Modificador de Bloques de Elementos
+
+Como su nombre indica, BEM distingue claramente 3 conceptos: el Bloque, el Elemento y el Modificador.
+------------------------
+Escapar una variable
+
+Para escapar una variable se usa el comodín #.
+
+Esto es necesario en casos como, por ejemplo, cuando la variable está rodeada por comillas y de no ponerse el escape la variable pasaría como una cadena de caracteres…
+
+$size: 10;
+
+div {
+  content: "#{$size}"
+}
+--------------------------------------------------------------------------------------------
+
+Anidaciones
+
+.btn {  
+  font-size: 15pt;
+  &__icon {
+    font-size: .6em;
+  }
+  &.btn--info {
+    background-color: $color-info;
+  }
+}
+El comodín & se usa para hacer referencia al padre.
+
+*
+Creo que las anidaciones pueden ser muy útiles para las pseudoclases. Algo así:
+
+.btn {
+  color: red;
+  &:hover {
+    color:blue;
+  }
+}
+
+---------------------------------------------
+
+Mixins
+
+Los mixins nos ayudan a reciclar declaraciones para evitar mucho trabajo. Para esto vamos a usar @mixin.
+
+Cuando se define un mixin, los argumentos se definen como una serie de variables separadas por comas, y todo ello encerrado entre paréntesis.
+
+@mixin max-width($max-width: 800px) {
+  max-width: $max-width
+  margin-left: auto
+  margin-right: auto
+}
+En este caso le estamos definiendo un valor por defecto. Si deseamos cambiar ese valor, cuando lo llamemos se lo podemos cambiar de esta forma:
+
+@mixin max-width(1200px)
+
+Los mixins permiten definir estilos reutilizables en toda la hoja de estilos.
+Se definen con la directiva @mixin seguida del nombre del mixin
+
+Los mixins se incluyen en las hojas de estilos mediante la directiva @include seguida del nombre del mixin y opcionalmente por una lista de argumentos
+
+------------------------------------------------------------------------------------
+
+Los **mixins **nos permite recibir parámetros, esta funcionalidad nos ayuda bastante, ya que con un solo mixins podemos obtener distintas salidas con solo cambiar el valor del parámetro.
+Ejemplo: Nos ayuda bastante al momento de realizar mediaqueries
+
+MIXINS
+
+@mixin encabezados($tamano) {
+  h1 {
+    font-size: $tamano;
+  }
+  h2 {
+    font-size: $tamano - 0.2;
+  }
+  h3 {
+    font-size: $tamano - 0.5;
+  }
+}
+
+MEDIAQUERIES
+
+@include encabezados(1.5em);
+@media(min-width: 800px) {
+  @include encabezados(2em);
+}
+@media(min-width: 1200px) {
+  @include encabezados(2.5em);
+}
+
+RESULTADO
+
+h1 {
+  font-size: 1.5em; }
+
+h2 {
+  font-size: 1.3em; }
+
+h3 {
+  font-size: 1em; }
+
+@media (min-width: 800px) {
+  h1 {
+    font-size: 2em; }
+
+  h2 {
+    font-size: 1.8em; }
+
+  h3 {
+    font-size: 1.5em; } }
+@media (min-width: 1200px) {
+  h1 {
+    font-size: 2.5em; }
+
+  h2 {
+    font-size: 2.3em; }
+
+  h3 {
+    font-size: 2em; } }
+
+
+
+LINK: https://desarrolloweb.com/articulos/mixin-sass.html
+
+--------------------------------------------------------------------------
+
+Uso de la directiva `content` (`block` en Stylus)
+
+Content
+Una de las características que tienen los mixins es la directiva content. Esta nos permite incluir un bloque de contenido dentro de un mixin.
+
+@mixin response-to($width) {
+  @media only screen and (min-width: $width) {
+    @content;
+  }
+}
+Se usa de esta forma:
+
+section {
+  background: blue;
+  @include response-to(800px) {
+    background-color: red;
+  };
+}
+
+---------------------------------------------------------------------------------------
+
+utilizando mixin
+
+@mixin ancho-alto {
+    width: 100%;
+    height: 100%;
+}
+
+p {
+    @include ancho-alto;
+}
+El resultado sería:
+
+p {
+    width: 100%;
+    height: 100%;
+}
+Ahora con parámetros:
+
+@mixin ancho-alto ($ancho: 100%, $alto: 100%) {
+    width: $ancho;
+    height: $alto;
+}
+
+p {
+    @include ancho-alto (800px);
+}
+El resultado sería:
+
+p {
+    width: 800px;
+    height: 100%;
+}
+Los mixin son muy útiles cuando necesitas cambiar la salida final, pero si lo que quieres es evitar código duplicado, con extend podríamos hacer los siguiente:
+
+.title{
+    color: blue;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.parrafo1{
+    @extend .title;
+}
+
+.parrafo2{
+    @extend .title;
+}
+Como resultado en el css compilado tendríamos
+
+.title, .parrafo1, .parrafo2 {
+    color: blue;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+}
+Esto porque el extend se trabaja como una herencia en donde parrafo1 y parrafo2 heredan los mismo atributos de title
+
+El mixin es un método que te regresa un resultado dependiendo de los parametros que le envies.
+El extend es como obtener una “copia” de un grupo de estilos que aplicas directamente.
+
+-----------------------------------------
+
+Placeholder Selectors
+
+Sass has a special kind of selector known as a “placeholder”. It looks and acts a lot like a class selector, but it starts with a % and it's not included in the CSS output. In fact, any complex selector (the ones between the commas) that even contains a placeholder selector isn't included in the CSS, nor is any style rule whose selectors all contain placeholders,
+
+SCSS SYNTAX
+.alert:hover, %strong-alert {
+  font-weight: bold;
+}
+
+%strong-alert:hover {
+  color: red;
+}
+
+CSS OUTPUT
+.alert:hover {
+  font-weight: bold;
+}
+
+
+Extend
+Permiten que una declaración herede estilos declarados por otra regla o placeholder. Los extend con placeholder se declaran con el símbolo de porcentaje %.
+
+%btn {
+  color: red;
+  width: 50px;
+}
+
+.btn-info {
+  @extend %btn;
+  background: blue;
+}
+
+el resultado en css sería el siguiente:
+
+.btn-info {
+  color: red;
+  width: 50px;
+  background: blue;
+}
+y el %btn podría usarlo en varias partes. La idea del placeholder es crear un bloque de estilos que se reutilicen en varias clases.
+
+Si aparte de .btn-info tengo otro estilo, por ejemplo, .btn-danger, entonces podría reutilizar %btn.
+
+.btn-danger {
+  @extend %btn;
+  background: orange;
+}
+y el resultado sería:
+
+.btn-danger {
+ color: red;
+ width: 50px;
+ background: orange;
+}
+
+--------------------------------------------------------------------------------------------
+
+Funciones
+
+Sass tiene muchas funciones que podemos usar cuando estamos modificando CSS. Muchas de estas funciones son muy útiles como por ejemplo aclarar un color u oscurecerlo.
+
+darken(#ffffff, 25%)
+lighten(#ffffff, 25%)
+invert(#ffffff)
+
+La lista completa de funciones se pueden ver aquí:
+https://sass-lang.com/documentation/file.SASS_REFERENCE.html#functions
+
+---------------------------------------------
+Crear funciones
+ 
+Las funciones nos permiten directamente modificar el valor de ciertas propiedades. Para crear una función vamos a usar el @function.
+
+
+
+@function suma($numero-uno, $numero-dos) {
+  @return $numero-uno + $numero-dos;
+}
+
+.div {
+  padding: suma(10px, 5px);
+}
+
+---------------------------
+
+Ejemplos de funciones
+
+Las funciones también puede ser extraer valores de un array. Una función puede utilizar arrays que son más parecidas a listas. Para Sass es más un mapa
+
+
+Array
+$fs: (
+  big: 24px,
+  normal: 16px,
+  small: 14px,
+  x-small: 12px
+);
+
+p {
+  font-size: map-get($fs, normal);
+}
+
+small {
+  font.size: map-get($fs, x-small);
+}
+
+-------------------------------------------------------------------------
+
+RETO: Organiza los z-index de un proyecto por medio de mapas y funciones
+
+usar map para guardar los índices de los elementos más comunes y usarlo como una tabla para aplicar a diferentes objetos del DOM…
+
+$indices:(
+	raiz: 1000,
+	carrousel: 1010,
+	tooltip: 1020,
+	navmenu: 1030,
+	modal: 1040
+);
+
+@function setIndex($capa){
+	@return map-get($indices,$capa);
+}
+
+.message{
+  z-index:setIndex(modal)
+}
+La salida en CSS por ejemplo de una clase para mensaje sería esta:
+
+.message {
+  z-index: 1040;
+}
+
+-------------------------------------------------------------------
+
+Listas y directiva each
+
+De ahora en adelante veremos varias directivas de control de flujo dentro de Sass. Por eso en esta clase vamos a hablar sobre cómo usar la directiva each y cómo manejar listas dentro de Sass.
+
+each
+
+$font-weights: normal bold italic;
+
+@each $font in ($font-weights) {
+  .#{$font} {font.weight: $font;}
+}
+y esto da como resultado:
+
+.normal {
+  font-weight: normal;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-weight: italic;
+}
+
+------------------------------------------
+
+Coloco aquí un ejemplo de directiva @each para crear clases para avatars con fotos de actores…
+
+$actores: Juan Pedro Mariel Alejo Jose;
+
+@each $actor in $actores {
+  .#{$actor}-foto{
+    background: image-url("images/foto-#{$actor}.jpg") no-repeat;
+  }
+}
+La salida en CSS sería la siguiente…
+
+.Juan-foto {
+  background: image-url("images/foto-Juan.jpg") no-repeat;
+}
+
+.Pedro-foto {
+  background: image-url("images/foto-Pedro.jpg") no-repeat;
+}
+
+.Mariel-foto {
+  background: image-url("images/foto-Mariel.jpg") no-repeat;
+}
+
+.Alejo-foto {
+  background: image-url("images/foto-Alejo.jpg") no-repeat;
+}
+
+.Jose-foto {
+  background: image-url("images/foto-Jose.jpg") no-repeat;
+}
+
+-----------------------------------------
+
+for
+
+@for $i from 1 to 5 {
+  .class-#{$i} {
+    &:before {
+      content: "#{$i}"
+    }
+  }
+}
+Resultado:
+
+.class-1:before {
+  content: "1";
+}
+
+.class-2:before {
+  content: "2";
+}
+
+...
+
+.class-5:before {
+  content: "5";
+}
+
+------------------------------------------------------------------
+
+if - condicionales
+
+
+if
+$background-color: black;
+
+@if $background-color == black {
+  p {
+    text-color: white;
+  }
+}
+@else {
+  p {
+    text-color: black;
+  }
+}
+
+
+
+-------------------------------------------------------------------
+https://github.com/Wakkos/StyleGuide-PlatziMusic/branches
+
+*/
